@@ -1,19 +1,21 @@
 <!DOCTYPE html>
 <html lang="si">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Clash of Clans Leaderboard</title>
 
-  <!-- 🆕 Font -->
+  <!-- Font -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
   <style>
     body {
-      font-family: "Poppins", sans-serif;
+      font-family: "Inter", sans-serif;
       margin: 0;
       padding: 20px;
+      /* If you prefer a plain color background, change to background: linear-gradient(...) or background-color */
       background: linear-gradient(135deg, #2b1a08, #8b4513);
+      min-height: 100vh;
     }
 
     h2 {
@@ -35,11 +37,11 @@
     .table-container {
       overflow-x: auto;
       width: 100%;
-      background: rgba(0, 0, 0, 0.6);
+      background: rgba(0,0,0,0.55);
       border-radius: 16px;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.35);
       padding: 10px;
-      backdrop-filter: blur(6px);
+      backdrop-filter: blur(4px);
     }
 
     table {
@@ -47,7 +49,7 @@
       width: 100%;
       border-radius: 12px;
       overflow: hidden;
-      background: linear-gradient(135deg, #2b1a08, #3a2a12);
+      background: linear-gradient(135deg, #3a250f, #6b3f11);
       color: #f9d37a;
     }
 
@@ -57,85 +59,116 @@
       text-transform: uppercase;
       letter-spacing: 0.5px;
       padding: 10px;
+      text-align: left;
     }
 
     td {
-      border-bottom: 1px solid rgba(255,255,255,0.1);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
       padding: 10px;
+      text-align: left;
     }
 
     tr:nth-child(even) {
-      background: rgba(255, 255, 255, 0.05);
+      background: rgba(255,255,255,0.02);
     }
 
     tr:hover {
-      background: rgba(255, 204, 51, 0.15);
-      transition: 0.3s;
+      background: rgba(255,204,51,0.08);
+      transition: 0.22s;
     }
 
     @media (max-width: 600px) {
       table { font-size: 14px; }
-      th, td { padding: 6px; }
-      h2 { font-size: 22px; }
-      .subtitle { font-size: 16px; }
+      th, td { padding: 8px; }
+      h2 { font-size: 20px; }
+      .subtitle { font-size: 15px; }
     }
   </style>
 </head>
 <body>
-  <h2>🏆 CHECKMATES - Leaderboard</h2>
+  <h2>🏆 Clash of Clans Leaderboard</h2>
   <h3 class="subtitle">November Season</h3>
 
   <div class="table-container">
-    <table id="dataTable"></table>
+    <table id="dataTable">
+      <tr><td>Loading...</td></tr>
+    </table>
   </div>
 
   <script>
-    // 🟢 ඔබගේ Google Sheet CSV link එක මෙතන දාන්න
+    // ====== Change this to your sheet's CSV link if needed ======
+    // If your sheet is published to web, use the /pub?output=csv link.
+    // If it's shared (anyone with link can view), export link also may work:
+    // "https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/export?format=csv"
     const sheetUrl = "https://docs.google.com/spreadsheets/d/1AIy-9I3dWadyYZwvplNzU_onua60uWV_LG646JbY9yU/export?format=csv";
+
+    // Helper: parse CSV line into fields (handles quoted fields with commas)
+    function parseCsvLine(line) {
+      // regex picks up quoted fields or unquoted fields separated by commas
+      const matches = line.match(/("([^"]*(?:""[^"]*)*)"|[^,]*)(,|$)/g);
+      if (!matches) return [];
+      return matches.map(m => {
+        // remove trailing comma if any, then remove surrounding quotes and unescape double quotes
+        m = m.endsWith(',') ? m.slice(0, -1) : m;
+        m = m.replace(/^"(.*)"$/, '$1').replace(/""/g, '"');
+        return m.trim();
+      });
+    }
 
     async function loadTable() {
       try {
-        const response = await fetch(sheetUrl);
-        const text = await response.text();
+        const resp = await fetch(sheetUrl);
+        if (!resp.ok) throw new Error("Sheet fetch failed: " + resp.status);
+        const text = await resp.text();
 
-        // CSV parse with regex (handles commas + quotes)
-        const rows = text.split(/\r?\n/).map(line => {
-          const matches = line.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g);
-          return matches ? matches.map(c => c.replace(/^"|"$/g, '').trim()) : [];
-        }).filter(r => r.length > 0);
+        // split into lines, filter out any completely empty trailing lines
+        const lines = text.split(/\r?\n/).filter((l, idx, arr) => {
+          // keep line if not empty, or if it's within array (filter trailing blank)
+          return l.trim() !== "" || idx < arr.length - 1;
+        });
 
-        // Remove empty header columns
-        const headers = rows[0];
-        const validIndexes = headers
-          .map((h, i) => (h && h.trim() !== "" ? i : null))
-          .filter(i => i !== null);
+        if (lines.length === 0) {
+          document.getElementById("dataTable").innerHTML = "<tr><td>No data found</td></tr>";
+          return;
+        }
 
+        // parse every line to array of fields
+        const rows = lines.map(line => parseCsvLine(line));
+
+        // Determine column count: use maximum columns present in any row
+        const colCount = rows.reduce((max, r) => Math.max(max, r.length), 0);
+
+        // Build header row using whatever is in the first row (even if empty)
+        const headers = rows[0] || [];
         let html = "<tr>";
-        validIndexes.forEach(i => html += `<th>${headers[i]}</th>`);
+        for (let c = 0; c < colCount; c++) {
+          const h = (headers[c] !== undefined) ? headers[c] : "";
+          html += `<th>${h}</th>`;
+        }
         html += "</tr>";
 
-        // Build table rows
-        for (let i = 1; i < rows.length; i++) {
-          const row = rows[i];
-          if (!row.some(cell => cell.trim() !== "")) continue;
+        // Build data rows (keep columns aligned with header index)
+        for (let r = 1; r < rows.length; r++) {
+          const row = rows[r];
+          // skip fully empty row
+          if (!row.some(cell => (cell || "").toString().trim() !== "")) continue;
           html += "<tr>";
-          validIndexes.forEach(idx => {
-            const value = row[idx] || "";
-            html += `<td>${value}</td>`;
-          });
+          for (let c = 0; c < colCount; c++) {
+            html += `<td>${(row[c] !== undefined) ? row[c] : ""}</td>`;
+          }
           html += "</tr>";
         }
 
         document.getElementById("dataTable").innerHTML = html;
-
       } catch (err) {
-        document.getElementById("dataTable").innerHTML = "<tr><td>Error loading data</td></tr>";
-        console.error("CSV parse error:", err);
+        console.error(err);
+        document.getElementById("dataTable").innerHTML = "<tr><td>Error loading sheet data</td></tr>";
       }
     }
 
+    // initial load + auto refresh
     loadTable();
-    setInterval(loadTable, 30000); // 🔁 refresh every 30s
+    setInterval(loadTable, 30000);
   </script>
 </body>
 </html>
