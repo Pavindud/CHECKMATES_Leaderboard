@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clash of Clans Leaderboard</title>
+
+  <!-- 🆕 Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: "Inter", sans-serif;
+      background: url('https://wallpapers.com/images/hd/clash-of-clans-heroes-4k-uzc8b7a3l7cxyvdq.jpg') no-repeat center center fixed;
+      background-size: cover;
+      padding: 20px;
+      margin: 0;
+    }
+
+    h2 {
+      color: #ffcc33;
+      text-align: center;
+      margin-bottom: 5px;
+      text-shadow: 0 0 10px rgba(0,0,0,0.8);
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #ffe28a;
+      font-size: 20px;
+      margin-bottom: 20px;
+      letter-spacing: 1px;
+      text-shadow: 0 0 6px rgba(0,0,0,0.6);
+    }
+
+    .table-container {
+      overflow-x: auto;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      border-radius: 16px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+      padding: 10px;
+      backdrop-filter: blur(6px);
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      border-radius: 12px;
+      overflow: hidden;
+      background: linear-gradient(135deg, #2b1a08, #3a2a12);
+      color: #f9d37a;
+    }
+
+    th {
+      background: #b8860b;
+      color: #fffbe0;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 10px;
+    }
+
+    td {
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      padding: 10px;
+    }
+
+    tr:nth-child(even) {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    tr:hover {
+      background: rgba(255, 204, 51, 0.15);
+      transition: 0.3s;
+    }
+
+    @media (max-width: 600px) {
+      table { font-size: 14px; }
+      th, td { padding: 6px; }
+      h2 { font-size: 22px; }
+      .subtitle { font-size: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <h2>🏆 CHECKMATES - Leaderboard</h2>
+  <h3 class="subtitle">November Season</h3>
+
+  <div class="table-container">
+    <table id="dataTable"></table>
+  </div>
+
+  <script>
+    // 🟢 ඔබගේ Google Sheet CSV link එක මෙතන දාන්න
+    const sheetUrl = "https://docs.google.com/spreadsheets/d/1AIy-9I3dWadyYZwvplNzU_onua60uWV_LG646JbY9yU/export?format=csv";
+
+    async function loadTable() {
+      try {
+        const response = await fetch(sheetUrl);
+        const text = await response.text();
+
+        // CSV parse with regex (handles commas + quotes)
+        const rows = text.split(/\r?\n/).map(line => {
+          const matches = line.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g);
+          return matches ? matches.map(c => c.replace(/^"|"$/g, '').trim()) : [];
+        }).filter(r => r.length > 0);
+
+        // Remove empty header columns
+        const headers = rows[0];
+        const validIndexes = headers
+          .map((h, i) => (h && h.trim() !== "" ? i : null))
+          .filter(i => i !== null);
+
+        let html = "<tr>";
+        validIndexes.forEach(i => html += `<th>${headers[i]}</th>`);
+        html += "</tr>";
+
+        // Build table rows
+        for (let i = 1; i < rows.length; i++) {
+          const row = rows[i];
+          if (!row.some(cell => cell.trim() !== "")) continue;
+          html += "<tr>";
+          validIndexes.forEach(idx => {
+            const value = row[idx] || "";
+            html += `<td>${value}</td>`;
+          });
+          html += "</tr>";
+        }
+
+        document.getElementById("dataTable").innerHTML = html;
+
+      } catch (err) {
+        document.getElementById("dataTable").innerHTML = "<tr><td>Error loading data</td></tr>";
+        console.error("CSV parse error:", err);
+      }
+    }
+
+    loadTable();
+    setInterval(loadTable, 30000); // 🔁 refresh every 30s
+  </script>
+</body>
+</html>
