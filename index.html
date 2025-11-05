@@ -124,7 +124,7 @@
         const headers = rows[0] || [];
 
         // 🔽 find "Rank" column index (case-insensitive)
-        const rankIndex = headers.findIndex(h => h.toLowerCase() === "rank");
+        const rankIndex = headers.findIndex(h => h.toLowerCase() === "Position");
 
         // 🔽 sort rows by Rank column (ascending numeric)
         const dataRows = rows.slice(1).filter(r => r.some(c => c.trim() !== ""));
