@@ -12,15 +12,22 @@
       font-family: "Inter", sans-serif;
       margin: 0;
       padding: 20px;
-      background: linear-gradient(135deg, #2b1a08, #8b4513);
+      background: radial-gradient(circle at top, #2b1a08 0%, #120700 100%);
       min-height: 100vh;
+      overflow-x: hidden;
     }
 
     h2 {
       color: #ffcc33;
       text-align: center;
       margin-bottom: 5px;
-      text-shadow: 0 0 10px rgba(0,0,0,0.8);
+      text-shadow: 0 0 15px rgba(255, 204, 51, 0.8);
+      animation: titleGlow 3s infinite alternate;
+    }
+
+    @keyframes titleGlow {
+      from { text-shadow: 0 0 8px #ffb300; }
+      to { text-shadow: 0 0 25px #ffe66d; }
     }
 
     .subtitle {
@@ -37,9 +44,17 @@
       width: 100%;
       background: rgba(0,0,0,0.55);
       border-radius: 16px;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.35);
+      box-shadow: 0 0 25px rgba(255, 204, 51, 0.25);
       padding: 10px;
-      backdrop-filter: blur(4px);
+      backdrop-filter: blur(6px);
+      margin-bottom: 40px;
+      opacity: 0;
+      animation: fadeIn 1.8s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     table {
@@ -49,30 +64,59 @@
       overflow: hidden;
       background: linear-gradient(135deg, #3a250f, #6b3f11);
       color: #f9d37a;
+      box-shadow: 0 0 20px rgba(0,0,0,0.3);
+      transition: transform 0.3s ease;
+    }
+
+    table:hover {
+      transform: scale(1.01);
+      box-shadow: 0 0 30px rgba(255,204,51,0.3);
     }
 
     th {
-      background: #b8860b;
+      background: linear-gradient(90deg, #b8860b, #ffb300);
       color: #fffbe0;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      padding: 10px;
+      padding: 12px;
       text-align: left;
+      font-weight: 600;
+      position: sticky;
+      top: 0;
+      animation: glowHeader 4s infinite alternate;
+    }
+
+    @keyframes glowHeader {
+      from { box-shadow: inset 0 -4px 12px rgba(255, 204, 51, 0.3); }
+      to { box-shadow: inset 0 -4px 20px rgba(255, 255, 150, 0.7); }
     }
 
     td {
       border-bottom: 1px solid rgba(255,255,255,0.06);
       padding: 10px;
       text-align: left;
+      transition: all 0.3s ease;
     }
 
     tr:nth-child(even) {
       background: rgba(255,255,255,0.02);
     }
 
-    tr:hover {
+    tr:hover td {
       background: rgba(255,204,51,0.08);
-      transition: 0.22s;
+      color: #fff8e1;
+      text-shadow: 0 0 8px rgba(255,204,51,0.5);
+    }
+
+    /* glowing line under Final table */
+    #finalTable {
+      border-top: 2px solid rgba(255, 215, 0, 0.4);
+      animation: glowBorder 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes glowBorder {
+      from { box-shadow: 0 -2px 10px rgba(255, 200, 0, 0.4); }
+      to { box-shadow: 0 -2px 20px rgba(255, 230, 120, 0.8); }
     }
 
     @media (max-width: 600px) {
@@ -93,6 +137,13 @@
     </table>
   </div>
 
+  <h2>🏁 Final Point Table</h2>
+  <div class="table-container">
+    <table id="finalTable">
+      <tr><td>Loading...</td></tr>
+    </table>
+  </div>
+
   <script>
     const sheetUrl = "https://docs.google.com/spreadsheets/d/1AIy-9I3dWadyYZwvplNzU_onua60uWV_LG646JbY9yU/export?format=csv";
 
@@ -106,7 +157,7 @@
       });
     }
 
-    async function loadTable() {
+    async function loadTables() {
       try {
         const resp = await fetch(sheetUrl);
         if (!resp.ok) throw new Error("Sheet fetch failed: " + resp.status);
@@ -115,53 +166,57 @@
         const lines = text.split(/\r?\n/).filter(l => l.trim() !== "");
         if (lines.length === 0) {
           document.getElementById("dataTable").innerHTML = "<tr><td>No data found</td></tr>";
+          document.getElementById("finalTable").innerHTML = "<tr><td>No data found</td></tr>";
           return;
         }
 
         const rows = lines.map(line => parseCsvLine(line));
-        const colCount = rows.reduce((max, r) => Math.max(max, r.length), 0);
-
-        const headers = rows[0] || [];
-
-        // 🔽 find "Rank" column index (case-insensitive)
-        const rankIndex = headers.findIndex(h => h.toLowerCase() === "Rank");
-
-        // 🔽 sort rows by Rank column (ascending numeric)
+        const headers = rows[0];
         const dataRows = rows.slice(1).filter(r => r.some(c => c.trim() !== ""));
+
+        // ✅ Find Rank column and sort
+        const rankIndex = headers.findIndex(h => h.toLowerCase() === "rank");
         if (rankIndex >= 0) {
-          dataRows.sort((a, b) => {
-            const valA = parseFloat(a[rankIndex]) || 0;
-            const valB = parseFloat(b[rankIndex]) || 0;
-            return valA - valB;
-          });
+          dataRows.sort((a, b) => (parseFloat(a[rankIndex]) || 0) - (parseFloat(b[rankIndex]) || 0));
         }
 
-        // build table HTML
+        // 🟡 Build main leaderboard
         let html = "<tr>";
-        for (let c = 0; c < colCount; c++) {
-          const h = headers[c] ?? "";
-          html += `<th>${h}</th>`;
-        }
+        for (const h of headers) html += `<th>${h}</th>`;
         html += "</tr>";
+        for (const row of dataRows) {
+          html += "<tr>" + row.map(c => `<td>${c}</td>`).join("") + "</tr>";
+        }
+        document.getElementById("dataTable").innerHTML = html;
 
-        for (let r = 0; r < dataRows.length; r++) {
-          const row = dataRows[r];
-          html += "<tr>";
-          for (let c = 0; c < colCount; c++) {
-            html += `<td>${row[c] ?? ""}</td>`;
-          }
-          html += "</tr>";
+        // 🟢 Build Final Point Table (MAP == "-")
+        const mapIndex = headers.findIndex(h => h.toLowerCase() === "map");
+        const playerIndex = headers.findIndex(h => h.toLowerCase().includes("player"));
+        const pointsIndex = headers.findIndex(h => h.toLowerCase().includes("total points"));
+        const destructionIndex = headers.findIndex(h => h.toLowerCase().includes("destruction"));
+        const finalRows = dataRows.filter(r => mapIndex >= 0 && r[mapIndex] === "-");
+
+        let finalHtml = "<tr><th>Player Name</th><th>Total Points</th><th>Destruction %</th><th>Rank</th></tr>";
+        for (const r of finalRows) {
+          finalHtml += `<tr>
+            <td>${r[playerIndex] || ""}</td>
+            <td>${r[pointsIndex] || ""}</td>
+            <td>${r[destructionIndex] || ""}</td>
+            <td>${r[rankIndex] || ""}</td>
+          </tr>`;
         }
 
-        document.getElementById("dataTable").innerHTML = html;
+        document.getElementById("finalTable").innerHTML = finalHtml;
+
       } catch (err) {
         console.error(err);
         document.getElementById("dataTable").innerHTML = "<tr><td>Error loading sheet data</td></tr>";
+        document.getElementById("finalTable").innerHTML = "<tr><td>Error loading sheet data</td></tr>";
       }
     }
 
-    loadTable();
-    setInterval(loadTable, 30000);
+    loadTables();
+    setInterval(loadTables, 30000);
   </script>
 </body>
 </html>
