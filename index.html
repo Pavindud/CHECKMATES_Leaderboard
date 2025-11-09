@@ -174,7 +174,7 @@
         const headers = rows[0];
         const dataRows = rows.slice(1).filter(r => r.some(c => c.trim() !== ""));
 
-        // ✅ Find Rank column and sort
+        // ✅ Find Rank column and sort (main table)
         const rankIndex = headers.findIndex(h => h.toLowerCase() === "rank");
         if (rankIndex >= 0) {
           dataRows.sort((a, b) => (parseFloat(a[rankIndex]) || 0) - (parseFloat(b[rankIndex]) || 0));
@@ -189,12 +189,18 @@
         }
         document.getElementById("dataTable").innerHTML = html;
 
-        // 🟢 Build Final Point Table (MAP == "-")
+        // 🟢 Build Final Point Table (MAP == "-" + Rank order)
         const mapIndex = headers.findIndex(h => h.toLowerCase() === "map");
         const playerIndex = headers.findIndex(h => h.toLowerCase().includes("player"));
         const pointsIndex = headers.findIndex(h => h.toLowerCase().includes("total points"));
         const destructionIndex = headers.findIndex(h => h.toLowerCase().includes("destruction"));
+
         const finalRows = dataRows.filter(r => mapIndex >= 0 && r[mapIndex] === "-");
+
+        // 🔽 sort by Rank (ascending)
+        if (rankIndex >= 0) {
+          finalRows.sort((a, b) => (parseFloat(a[rankIndex]) || 0) - (parseFloat(b[rankIndex]) || 0));
+        }
 
         let finalHtml = "<tr><th>Player Name</th><th>Total Points</th><th>Destruction %</th><th>Rank</th></tr>";
         for (const r of finalRows) {
