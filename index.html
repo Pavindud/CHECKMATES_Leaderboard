@@ -14,15 +14,23 @@
       padding: 20px;
       background: radial-gradient(circle at top, #2b1a08 0%, #120700 100%);
       min-height: 100vh;
-      overflow-x: hidden;
+      color:#f9d37a;
     }
 
-    h2 {
-      color: #ffcc33;
-      text-align: center;
-      margin-bottom: 5px;
-      text-shadow: 0 0 15px rgba(255, 204, 51, 0.8);
-      animation: titleGlow 3s infinite alternate;
+    .top-row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    h2.title {
+      color:#ffcc33;
+      margin:0;
+      text-shadow:0 0 15px rgba(255,204,51,0.8);
+      animation:titleGlow 3s infinite alternate;
+      font-size:20px;
     }
 
     @keyframes titleGlow {
@@ -30,105 +38,203 @@
       to { text-shadow: 0 0 25px #ffe66d; }
     }
 
-    .subtitle {
-      text-align: center;
-      color: #ffe28a;
-      font-size: 20px;
-      margin-bottom: 20px;
-      letter-spacing: 1px;
-      text-shadow: 0 0 6px rgba(0,0,0,0.6);
+    .controls{
+      display:flex;
+      gap:8px;
+      align-items:center;
     }
 
-    .table-container {
-      overflow-x: auto;
-      width: 100%;
-      background: rgba(0,0,0,0.55);
-      border-radius: 16px;
-      box-shadow: 0 0 25px rgba(255, 204, 51, 0.25);
-      padding: 10px;
-      backdrop-filter: blur(6px);
-      margin-bottom: 40px;
-      opacity: 0;
-      animation: fadeIn 1.8s ease forwards;
+    .arrow-btn{
+      background:rgba(0,0,0,0.45);
+      border:1px solid rgba(255,215,0,0.12);
+      color:#fffbe0;
+      padding:8px 12px;
+      border-radius:10px;
+      cursor:pointer;
+      font-weight:600;
+      box-shadow:0 2px 10px rgba(0,0,0,0.4);
+    }
+
+    .month-select{
+      background:rgba(0,0,0,0.35);
+      color:#f9d37a;
+      border:1px solid rgba(255,215,0,0.12);
+      padding:8px 10px;
+      border-radius:10px;
+      font-weight:600;
+    }
+
+    .subtitle{
+      width:100%;
+      text-align:center;
+      color:#ffe28a;
+      font-size:16px;
+      margin:6px 0 18px;
+      letter-spacing:1px;
+    }
+
+    .table-container{
+      overflow-x:auto;
+      width:100%;
+      background:rgba(0,0,0,0.55);
+      border-radius:16px;
+      box-shadow:0 0 25px rgba(255,204,51,0.25);
+      padding:10px;
+      backdrop-filter:blur(6px);
+      margin-bottom:30px;
+      animation:fadeIn 0.7s ease forwards;
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+      from { opacity:0; transform:translateY(10px); }
+      to { opacity:1; transform:translateY(0); }
     }
 
-    table {
-      border-collapse: collapse;
-      width: 100%;
-      border-radius: 12px;
-      overflow: hidden;
-      background: linear-gradient(135deg, #3a250f, #6b3f11);
-      color: #f9d37a;
-      box-shadow: 0 0 20px rgba(0,0,0,0.3);
-      transition: transform 0.3s ease;
+    table{
+      border-collapse:collapse;
+      width:100%;
+      border-radius:12px;
+      overflow:hidden;
+      background:linear-gradient(135deg,#3a250f,#6b3f11);
+      color:#f9d37a;
+      box-shadow:0 0 20px rgba(0,0,0,0.3);
+      font-size:15px;
     }
 
-    table:hover {
-      transform: scale(1.01);
-      box-shadow: 0 0 30px rgba(255,204,51,0.3);
+    th{
+      background:linear-gradient(90deg,#b8860b,#ffb300);
+      color:#fffbe0;
+      padding:10px;
+      text-align:left;
+      font-weight:600;
+      position:sticky;
+      top:0;
     }
 
-    th {
-      background: linear-gradient(90deg, #b8860b, #ffb300);
-      color: #fffbe0;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      padding: 12px;
-      text-align: left;
-      font-weight: 600;
-      position: sticky;
-      top: 0;
-      animation: glowHeader 4s infinite alternate;
+    td{
+      border-bottom:1px solid rgba(255,255,255,0.06);
+      padding:8px;
     }
 
-    @keyframes glowHeader {
-      from { box-shadow: inset 0 -4px 12px rgba(255, 204, 51, 0.3); }
-      to { box-shadow: inset 0 -4px 20px rgba(255, 255, 150, 0.7); }
+    tr:nth-child(even) td{
+      background:rgba(255,255,255,0.02);
     }
 
-    td {
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-      padding: 10px;
-      text-align: left;
-      transition: all 0.3s ease;
+    tr:hover td{
+      background:rgba(255,204,51,0.06);
+      color:#fff8e1;
     }
 
-    tr:nth-child(even) {
-      background: rgba(255,255,255,0.02);
+    .error-box{
+      background:rgba(0,0,0,0.6);
+      border:1px solid rgba(255,50,50,0.12);
+      padding:12px;
+      border-radius:8px;
+      color:#ffd7d7;
+      margin-bottom:10px;
     }
 
-    tr:hover td {
-      background: rgba(255,204,51,0.08);
-      color: #fff8e1;
-      text-shadow: 0 0 8px rgba(255,204,51,0.5);
+    /* ========================= */
+    /* 🔥 Clash of Clans Footer */
+    /* ========================= */
+
+    .coc-footer{
+      position:relative;
+      margin-top:80px;
+      height:260px;
+      overflow:hidden;
+      border-top:2px solid rgba(255,180,0,0.6);
+      box-shadow:0 -10px 30px rgba(255,100,0,0.4);
     }
 
-    #finalTable {
-      border-top: 2px solid rgba(255, 215, 0, 0.4);
-      animation: glowBorder 2s ease-in-out infinite alternate;
+    .coc-bg{
+      position:absolute;
+      inset:0;
+      background:
+        linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0.3)),
+        url("https://i.ibb.co/0jsJm7J/coc-battle-bg.jpg");
+      background-size:cover;
+      background-position:center;
+      filter:blur(1px);
     }
 
-    @keyframes glowBorder {
-      from { box-shadow: 0 -2px 10px rgba(255, 200, 0, 0.4); }
-      to { box-shadow: 0 -2px 20px rgba(255, 230, 120, 0.8); }
+    .coc-footer-content{
+      position:relative;
+      z-index:2;
+      height:100%;
+      display:flex;
+      align-items:center;
+      justify-content:space-around;
+      padding:10px;
     }
 
-    @media (max-width: 600px) {
-      table { font-size: 14px; }
-      th, td { padding: 8px; }
-      h2 { font-size: 20px; }
-      .subtitle { font-size: 15px; }
+    .coc-logo-left{
+      height:85px;
+      filter:drop-shadow(0 0 12px orange);
+    }
+
+    .clan-logo-center{
+      height:130px;
+      filter:drop-shadow(0 0 20px rgba(255,165,0,0.9));
+      animation:flamePulse 2s infinite alternate;
+      border-radius:18px;
+    }
+
+    .clan-name{
+      font-size:32px;
+      font-weight:700;
+      color:#ffcc00;
+      text-shadow:
+        0 0 15px rgba(255,165,0,0.8),
+        0 0 30px rgba(255,100,0,0.7);
+      letter-spacing:2px;
+    }
+
+    .footer-text{
+      position:absolute;
+      bottom:10px;
+      width:100%;
+      text-align:center;
+      font-size:14px;
+      color:#ffd27f;
+      z-index:2;
+    }
+
+    @keyframes flamePulse{
+      from{
+        transform:scale(1);
+        filter:drop-shadow(0 0 10px orange);
+      }
+      to{
+        transform:scale(1.06);
+        filter:drop-shadow(0 0 24px red);
+      }
+    }
+
+    @media(max-width:600px){
+      .coc-logo-left{height:60px;}
+      .clan-logo-center{height:90px;}
+      .clan-name{font-size:22px;}
+      table{font-size:13px;}
     }
   </style>
 </head>
+
 <body>
-  <h2>🏆 CWL | Leaderboard - CHECKMATES</h2>
-  <h3 class="subtitle">November Season</h3>
+
+  <div class="top-row">
+    <h2 class="title" id="pageTitle">🏆 CWL | Leaderboard - </h2>
+
+    <div class="controls">
+      <button class="arrow-btn" id="prevBtn">◀</button>
+      <select id="monthSelect" class="month-select"></select>
+      <button class="arrow-btn" id="nextBtn">▶</button>
+    </div>
+  </div>
+
+  <div class="subtitle" id="subtitle">Season</div>
+
+  <div id="errorArea"></div>
 
   <div class="table-container">
     <table id="dataTable">
@@ -136,7 +242,7 @@
     </table>
   </div>
 
-  <h2>🏁 Final Point Table</h2>
+  <h2 class="title">🏁 Final Point Table</h2>
   <div class="table-container">
     <table id="finalTable">
       <tr><td>Loading...</td></tr>
@@ -144,88 +250,145 @@
   </div>
 
   <script>
-    const sheetUrl = "https://docs.google.com/spreadsheets/d/1AIy-9I3dWadyYZwvplNzU_onua60uWV_LG646JbY9yU/export?format=csv";
+    const spreadsheetId = "1AIy-9I3dWadyYZwvplNzU_onua60uWV_LG646JbY9yU";
 
-    function parseCsvLine(line) {
+    const tables = {
+      "November": { label: "November Season", gid: 0 },
+      "December": { label: "December Season", gid: 1347643855 }
+    };
+
+    const defaultMonth = "December";
+    const REFRESH_INTERVAL = 30000;
+
+    function buildCsvUrl(gid){
+      return `https://docs.google.com/spreadsheets/d/${spreadsheetId}/export?format=csv&gid=${gid}`;
+    }
+
+    function parseCsvLine(line){
       const matches = line.match(/("([^"]*(?:""[^"]*)*)"|[^,]*)(,|$)/g);
-      if (!matches) return [];
-      return matches.map(m => {
-        m = m.endsWith(',') ? m.slice(0, -1) : m;
-        m = m.replace(/^"(.*)"$/, '$1').replace(/""/g, '"');
+      if(!matches) return[];
+      return matches.map(m=>{
+        m = m.endsWith(',') ? m.slice(0,-1) : m;
+        m = m.replace(/^"(.*)"$/, '$1').replace(/""/g,'"');
         return m.trim();
       });
     }
 
-    async function loadTables() {
-      try {
-        const resp = await fetch(sheetUrl);
-        if (!resp.ok) throw new Error("Sheet fetch failed: " + resp.status);
-        const text = await resp.text();
+    const monthKeys = Object.keys(tables);
+    const monthSelect = document.getElementById("monthSelect");
+    const pageTitle = document.getElementById("pageTitle");
+    const subtitle = document.getElementById("subtitle");
+    const dataTableEl = document.getElementById("dataTable");
+    const finalTableEl = document.getElementById("finalTable");
+    const errorArea = document.getElementById("errorArea");
 
-        const lines = text.split(/\r?\n/).filter(l => l.trim() !== "");
-        if (lines.length === 0) {
-          document.getElementById("dataTable").innerHTML = "<tr><td>No data found</td></tr>";
-          document.getElementById("finalTable").innerHTML = "<tr><td>No data found</td></tr>";
-          return;
-        }
+    monthKeys.forEach(m=>{
+      const opt = document.createElement("option");
+      opt.value = m;
+      opt.textContent = m;
+      monthSelect.appendChild(opt);
+    });
 
-        const rows = lines.map(line => parseCsvLine(line));
+    let currentIndex = Math.max(0, monthKeys.indexOf(defaultMonth));
+    monthSelect.value = monthKeys[currentIndex];
+
+    function showLoading(){
+      dataTableEl.innerHTML = "<tr><td>Loading...</td></tr>";
+      finalTableEl.innerHTML = "<tr><td>Loading...</td></tr>";
+      errorArea.innerHTML = "";
+    }
+
+    async function loadMonth(key){
+      const m = tables[key];
+      const url = buildCsvUrl(m.gid);
+      pageTitle.textContent = "🏆 CWL | Leaderboard - " + key;
+      subtitle.textContent = m.label;
+      showLoading();
+
+      try{
+        const res = await fetch(url);
+        if(!res.ok) throw new Error("Fetch failed: " + res.status);
+        const text = await res.text();
+        const lines = text.split(/\r?\n/).filter(l=>l.trim()!=="");
+        const rows = lines.map(parseCsvLine);
         const headers = rows[0];
-        const dataRows = rows.slice(1).filter(r => r.some(c => c.trim() !== ""));
+        const dataRows = rows.slice(1);
 
-        // ✅ Rank column sort
-        const rankIndex = headers.findIndex(h => h.toLowerCase() === "rank");
-        if (rankIndex >= 0) {
-          dataRows.sort((a, b) => (parseFloat(a[rankIndex]) || 0) - (parseFloat(b[rankIndex]) || 0));
-        }
-
-        // 🟡 Build Main Table
-        let html = "<tr>";
-        for (const h of headers) html += `<th>${h}</th>`;
-        html += "</tr>";
-        for (const row of dataRows) {
-          html += "<tr>" + row.map(c => `<td>${c}</td>`).join("") + "</tr>";
-        }
-        document.getElementById("dataTable").innerHTML = html;
-
-        // 🟢 Build Final Point Table (MAP = number only)
-        const mapIndex = headers.findIndex(h => h.toLowerCase() === "map");
-        const playerIndex = headers.findIndex(h => h.toLowerCase().includes("player"));
-        const pointsIndex = headers.findIndex(h => h.toLowerCase().includes("total points"));
-        const destructionIndex = headers.findIndex(h => h.toLowerCase().includes("destruction"));
-
-        const finalRows = dataRows.filter(r => {
-          if (mapIndex < 0) return false;
-          const val = r[mapIndex];
-          return val && !isNaN(val) && (val === "0" || val === "2");
+        let html = "<tr>" + headers.map(h=>`<th>${h}</th>`).join("") + "</tr>";
+        dataRows.forEach(r=>{
+          html += "<tr>" + r.map(c=>`<td>${c}</td>`).join("") + "</tr>";
         });
+        dataTableEl.innerHTML = html;
 
-        // 🔽 sort by Rank
-        if (rankIndex >= 0) {
-          finalRows.sort((a, b) => (parseFloat(a[rankIndex]) || 0) - (parseFloat(b[rankIndex]) || 0));
-        }
+        const rankIndex = headers.findIndex(h=>h.toLowerCase()==="rank");
+        const playerIndex = headers.findIndex(h=>h.toLowerCase().includes("player"));
+        const pointsIndex = headers.findIndex(h=>h.toLowerCase().includes("total"));
+        const destructionIndex = headers.findIndex(h=>h.toLowerCase().includes("destruction"));
 
-        let finalHtml = "<tr><th>Player Name</th><th>Total Points</th><th>Destruction %</th><th>Rank</th></tr>";
-        for (const r of finalRows) {
-          finalHtml += `<tr>
-            <td>${r[playerIndex] || ""}</td>
-            <td>${r[pointsIndex] || ""}</td>
-            <td>${r[destructionIndex] || ""}</td>
-            <td>${r[rankIndex] || ""}</td>
-          </tr>`;
-        }
+        let finalHtml = "<tr><th>Player</th><th>Total Points</th><th>Destruction</th><th>Rank</th></tr>";
+        dataRows.forEach(r=>{
+          finalHtml += `
+            <tr>
+              <td>${r[playerIndex]||""}</td>
+              <td>${r[pointsIndex]||""}</td>
+              <td>${r[destructionIndex]||""}</td>
+              <td>${r[rankIndex]||""}</td>
+            </tr>
+          `;
+        });
+        finalTableEl.innerHTML = finalHtml;
 
-        document.getElementById("finalTable").innerHTML = finalHtml;
-
-      } catch (err) {
-        console.error(err);
-        document.getElementById("dataTable").innerHTML = "<tr><td>Error loading sheet data</td></tr>";
-        document.getElementById("finalTable").innerHTML = "<tr><td>Error loading sheet data</td></tr>";
+      }catch(e){
+        errorArea.innerHTML = "<div class='error-box'>❌ Sheet load failed</div>";
+        dataTableEl.innerHTML = "<tr><td>Error</td></tr>";
+        finalTableEl.innerHTML = "<tr><td>Error</td></tr>";
       }
     }
 
-    loadTables();
-    setInterval(loadTables, 30000);
+    document.getElementById("prevBtn").onclick = ()=> {
+      currentIndex = (currentIndex-1+monthKeys.length)%monthKeys.length;
+      monthSelect.value = monthKeys[currentIndex];
+      loadMonth(monthKeys[currentIndex]);
+    };
+
+    document.getElementById("nextBtn").onclick = ()=> {
+      currentIndex = (currentIndex+1)%monthKeys.length;
+      monthSelect.value = monthKeys[currentIndex];
+      loadMonth(monthKeys[currentIndex]);
+    };
+
+    monthSelect.onchange = ()=>{
+      currentIndex = monthKeys.indexOf(monthSelect.value);
+      loadMonth(monthKeys[currentIndex]);
+    };
+
+    loadMonth(monthKeys[currentIndex]);
+    setInterval(()=>loadMonth(monthKeys[currentIndex]),REFRESH_INTERVAL);
   </script>
+
+  <!-- 🔥 Clash of Clans Footer -->
+  <footer class="coc-footer">
+    <div class="coc-bg"></div>
+
+    <div class="coc-footer-content">
+      <img 
+        src="https://i.ibb.co/J3wK9nQ/clash-of-clans-logo.png"
+        class="coc-logo-left"
+      >
+
+      <!-- 🔁 Replace URL with your real transparent logo later -->
+      <img 
+        src="https://i.ibb.co/6rPp8kY/your-transparent-logo.png"
+        class="clan-logo-center"
+      >
+
+      <div class="clan-name">CHECKMATES</div>
+    </div>
+
+    <div class="footer-text">
+      © 2025 CHECKMATES | Clash of Clans War Stats
+    </div>
+  </footer>
+
 </body>
 </html>
