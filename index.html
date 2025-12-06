@@ -389,6 +389,29 @@
       © 2025 CHECKMATES | Clash of Clans War Stats
     </div>
   </footer>
+<script>
+function sortTableByRank() {
+  const table = document.querySelector("#statsTable");
+  if (!table) return;
+
+  const tbody = table.querySelector("tbody");
+  const rows = Array.from(tbody.querySelectorAll("tr"));
+
+  rows.sort((a, b) => {
+    // 2nd column = index 1
+    const rankA = parseFloat(a.cells[1].innerText.trim()) || 0;
+    const rankB = parseFloat(b.cells[1].innerText.trim()) || 0;
+    return rankA - rankB;
+  });
+
+  rows.forEach(row => tbody.appendChild(row));
+}
+
+// Run when page loads
+document.addEventListener("DOMContentLoaded", () => {
+  sortTableByRank();
+});
+</script>
 
 </body>
 </html>
