@@ -4,231 +4,37 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>CWL Leaderboard - CHECKMATES</title>
-
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-
   <style>
-    body {
-      font-family: "Inter", sans-serif;
-      margin: 0;
-      padding: 20px;
-      background: radial-gradient(circle at top, #2b1a08 0%, #120700 100%);
-      min-height: 100vh;
-      color:#f9d37a;
-    }
-
-    .top-row{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      flex-wrap:wrap;
-    }
-
-    h2.title {
-      color:#ffcc33;
-      margin:0;
-      text-shadow:0 0 15px rgba(255,204,51,0.8);
-      animation:titleGlow 3s infinite alternate;
-      font-size:20px;
-    }
-
-    @keyframes titleGlow {
-      from { text-shadow: 0 0 8px #ffb300; }
-      to { text-shadow: 0 0 25px #ffe66d; }
-    }
-
-    .controls{
-      display:flex;
-      gap:8px;
-      align-items:center;
-    }
-
-    .arrow-btn{
-      background:rgba(0,0,0,0.45);
-      border:1px solid rgba(255,215,0,0.12);
-      color:#fffbe0;
-      padding:8px 12px;
-      border-radius:10px;
-      cursor:pointer;
-      font-weight:600;
-      box-shadow:0 2px 10px rgba(0,0,0,0.4);
-    }
-
-    .month-select{
-      background:rgba(0,0,0,0.35);
-      color:#f9d37a;
-      border:1px solid rgba(255,215,0,0.12);
-      padding:8px 10px;
-      border-radius:10px;
-      font-weight:600;
-    }
-
-    .subtitle{
-      width:100%;
-      text-align:center;
-      color:#ffe28a;
-      font-size:16px;
-      margin:6px 0 18px;
-      letter-spacing:1px;
-    }
-
-    .table-container{
-      overflow-x:auto;
-      width:100%;
-      background:rgba(0,0,0,0.55);
-      border-radius:16px;
-      box-shadow:0 0 25px rgba(255,204,51,0.25);
-      padding:10px;
-      backdrop-filter:blur(6px);
-      margin-bottom:30px;
-      animation:fadeIn 0.7s ease forwards;
-    }
-
-    @keyframes fadeIn {
-      from { opacity:0; transform:translateY(10px); }
-      to { opacity:1; transform:translateY(0); }
-    }
-
-    table{
-      border-collapse:collapse;
-      width:100%;
-      border-radius:12px;
-      overflow:hidden;
-      background:linear-gradient(135deg,#3a250f,#6b3f11);
-      color:#f9d37a;
-      box-shadow:0 0 20px rgba(0,0,0,0.3);
-      font-size:15px;
-    }
-
-    th{
-      background:linear-gradient(90deg,#b8860b,#ffb300);
-      color:#fffbe0;
-      padding:10px;
-      text-align:left;
-      font-weight:600;
-      position:sticky;
-      top:0;
-    }
-
-    td{
-      border-bottom:1px solid rgba(255,255,255,0.06);
-      padding:8px;
-    }
-
-    tr:nth-child(even) td{
-      background:rgba(255,255,255,0.02);
-    }
-
-    tr:hover td{
-      background:rgba(255,204,51,0.06);
-      color:#fff8e1;
-    }
-
-    .error-box{
-      background:rgba(0,0,0,0.6);
-      border:1px solid rgba(255,50,50,0.12);
-      padding:12px;
-      border-radius:8px;
-      color:#ffd7d7;
-      margin-bottom:10px;
-    }
-
-    /* ========================= */
-    /* 🔥 Clash of Clans Footer */
-    /* ========================= */
-
-    .coc-footer{
-      position:relative;
-      margin-top:80px;
-      height:260px;
-      overflow:hidden;
-      border-top:2px solid rgba(255,180,0,0.6);
-      box-shadow:0 -10px 30px rgba(255,100,0,0.4);
-    }
-
-    .coc-bg{
-      position:absolute;
-      inset:0;
-      background:
-        linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0.3)),
-        url("7455304.jpg");
-      background-size:cover;
-      background-position:center;
-      filter:blur(1px);
-    }
-
-    .coc-footer-content{
-      position:relative;
-      z-index:2;
-      height:100%;
-      display:flex;
-      align-items:center;
-      justify-content:space-around;
-      padding:10px;
-    }
-
-    .coc-logo-left{
-      height:85px;
-      filter:drop-shadow(0 0 12px orange);
-    }
-
-    .clan-logo-center{
-      height:130px;
-      filter:drop-shadow(0 0 20px rgba(255,165,0,0.9));
-      animation:flamePulse 2s infinite alternate;
-      border-radius:18px;
-    }
-
-    .clan-name{
-      font-size:32px;
-      font-weight:700;
-      color:#ffcc00;
-      text-shadow:
-        0 0 15px rgba(255,165,0,0.8),
-        0 0 30px rgba(255,100,0,0.7);
-      letter-spacing:2px;
-    }
-
-    .footer-text{
-      position:absolute;
-      bottom:10px;
-      width:100%;
-      text-align:center;
-      font-size:14px;
-      color:#ffd27f;
-      z-index:2;
-    }
-
-    @keyframes flamePulse{
-      from{
-        transform:scale(1);
-        filter:drop-shadow(0 0 10px orange);
-      }
-      to{
-        transform:scale(1.06);
-        filter:drop-shadow(0 0 24px red);
-      }
-    }
-
-    @media(max-width:600px){
-      .coc-logo-left{height:60px;}
-      .clan-logo-center{height:90px;}
-      .clan-name{font-size:22px;}
-      table{font-size:13px;}
-    }
+    body { font-family: "Inter", sans-serif; margin:0; padding:20px; background: radial-gradient(circle at top, #2b1a08 0%, #120700 100%); color:#f9d37a; min-height:100vh; }
+    .top-row{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+    h2.title{color:#ffcc33;margin:0;text-shadow:0 0 15px rgba(255,204,51,0.8);animation:titleGlow 3s infinite alternate;font-size:20px}
+    @keyframes titleGlow{from{text-shadow:0 0 8px #ffb300}to{text-shadow:0 0 25px #ffe66d}}
+    .subtitle{width:100%;text-align:center;color:#ffe28a;font-size:16px;margin:6px 0 18px;letter-spacing:1px;text-shadow:0 0 6px rgba(0,0,0,0.6)}
+    .controls{display:flex;gap:8px;align-items:center}
+    .arrow-btn{background:rgba(0,0,0,0.45);border:1px solid rgba(255,215,0,0.12);color:#fffbe0;padding:8px 12px;border-radius:10px;cursor:pointer;font-weight:600;box-shadow:0 2px 10px rgba(0,0,0,0.4)}
+    .arrow-btn:active{transform:translateY(1px)}
+    .month-select{background:rgba(0,0,0,0.35);color:#f9d37a;border:1px solid rgba(255,215,0,0.12);padding:8px 10px;border-radius:10px;font-weight:600}
+    .table-container{overflow-x:auto;width:100%;background:rgba(0,0,0,0.55);border-radius:16px;box-shadow:0 0 25px rgba(255,204,51,0.25);padding:10px;backdrop-filter:blur(6px);margin-bottom:24px;animation:fadeIn 0.7s ease forwards}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+    table{border-collapse:collapse;width:100%;border-radius:12px;overflow:hidden;background:linear-gradient(135deg,#3a250f,#6b3f11);color:#f9d37a;box-shadow:0 0 20px rgba(0,0,0,0.3);transition:transform .25s;font-size:15px}
+    th{background:linear-gradient(90deg,#b8860b,#ffb300);color:#fffbe0;text-transform:uppercase;letter-spacing:0.5px;padding:10px;text-align:left;font-weight:600;position:sticky;top:0}
+    td{border-bottom:1px solid rgba(255,255,255,0.06);padding:8px;text-align:left}
+    tr:nth-child(even) td{background:rgba(255,255,255,0.02)}
+    tr:hover td{background:rgba(255,204,51,0.06);color:#fff8e1}
+    .small-muted{color:#f3e1b1;font-size:13px;opacity:0.9}
+    .skeleton{background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.06)); color:transparent}
+    .error-box{background:rgba(0,0,0,0.6);border:1px solid rgba(255,50,50,0.12);padding:12px;border-radius:8px;color:#ffd7d7;margin-bottom:12px}
+    @media(max-width:600px){table{font-size:13px}th,td{padding:6px}.arrow-btn{padding:6px 8px}h2.title{font-size:16px}.subtitle{font-size:13px}}
   </style>
 </head>
-
 <body>
-
   <div class="top-row">
     <h2 class="title" id="pageTitle">🏆 CWL | Leaderboard - </h2>
-
     <div class="controls">
-      <button class="arrow-btn" id="prevBtn">◀</button>
-      <select id="monthSelect" class="month-select"></select>
-      <button class="arrow-btn" id="nextBtn">▶</button>
+      <button id="prevBtn" class="arrow-btn" title="Previous month">◀</button>
+      <select id="monthSelect" class="month-select" aria-label="Choose month"></select>
+      <button id="nextBtn" class="arrow-btn" title="Next month">▶</button>
     </div>
   </div>
 
@@ -237,181 +43,203 @@
   <div id="errorArea"></div>
 
   <div class="table-container">
-    <table id="dataTable">
-      <tr><td>Loading...</td></tr>
-    </table>
+    <table id="dataTable" aria-live="polite"><tr><td class="skeleton">Loading...</td></tr></table>
   </div>
 
-  <h2 class="title">🏁 Final Point Table</h2>
+  <h2 class="title" style="margin-top:8px;">🏁 Final Point Table</h2>
   <div class="table-container">
-    <table id="finalTable">
-      <tr><td>Loading...</td></tr>
-    </table>
+    <table id="finalTable" aria-live="polite"><tr><td class="skeleton">Loading...</td></tr></table>
   </div>
 
   <script>
+    /**********************************************
+     *  CONFIG - change these values if needed    *
+     **********************************************/
     const spreadsheetId = "1AIy-9I3dWadyYZwvplNzU_onua60uWV_LG646JbY9yU";
 
+    // Update months here. Using the gids you gave:
     const tables = {
       "November": { label: "November Season", gid: 0 },
       "December": { label: "December Season", gid: 1347643855 }
+      // Add more months like:
+      // "January": { label: "January Season", gid: 22222222 },
+      // Or use 'csv' property with full export link:
+      // "January": { label: "January Season", csv: "https://docs.google.com/spreadsheets/d/.../export?format=csv&gid=..." }
     };
 
     const defaultMonth = "December";
-    const REFRESH_INTERVAL = 30000;
+    const REFRESH_INTERVAL = 30000; // ms
 
-    function buildCsvUrl(gid){
+    /**********************************************
+     *  Internal helpers and UI logic             *
+     **********************************************/
+    function buildCsvUrlFromGid(gid) {
       return `https://docs.google.com/spreadsheets/d/${spreadsheetId}/export?format=csv&gid=${gid}`;
     }
+    function getCsvUrl(entry) {
+      if (!entry) return null;
+      if (entry.csv) return entry.csv;
+      if (typeof entry.gid !== "undefined" && entry.gid !== null) return buildCsvUrlFromGid(entry.gid);
+      return `https://docs.google.com/spreadsheets/d/${spreadsheetId}/export?format=csv`;
+    }
 
-    function parseCsvLine(line){
+    function parseCsvLine(line) {
       const matches = line.match(/("([^"]*(?:""[^"]*)*)"|[^,]*)(,|$)/g);
-      if(!matches) return[];
-      return matches.map(m=>{
+      if (!matches) return [];
+      return matches.map(m => {
         m = m.endsWith(',') ? m.slice(0,-1) : m;
-        m = m.replace(/^"(.*)"$/, '$1').replace(/""/g,'"');
+        m = m.replace(/^"(.*)"$/, '$1').replace(/""/g, '"');
         return m.trim();
       });
     }
 
     const monthKeys = Object.keys(tables);
-    const monthSelect = document.getElementById("monthSelect");
-    const pageTitle = document.getElementById("pageTitle");
-    const subtitle = document.getElementById("subtitle");
-    const dataTableEl = document.getElementById("dataTable");
-    const finalTableEl = document.getElementById("finalTable");
-    const errorArea = document.getElementById("errorArea");
-
-    monthKeys.forEach(m=>{
-      const opt = document.createElement("option");
-      opt.value = m;
-      opt.textContent = m;
+    const monthSelect = document.getElementById('monthSelect');
+    monthKeys.forEach(k => {
+      const opt = document.createElement('option');
+      opt.value = k; opt.textContent = k;
       monthSelect.appendChild(opt);
     });
 
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const pageTitle = document.getElementById('pageTitle');
+    const subtitle = document.getElementById('subtitle');
+    const dataTableEl = document.getElementById('dataTable');
+    const finalTableEl = document.getElementById('finalTable');
+    const errorArea = document.getElementById('errorArea');
+
     let currentIndex = Math.max(0, monthKeys.indexOf(defaultMonth));
+    if (currentIndex < 0) currentIndex = 0;
     monthSelect.value = monthKeys[currentIndex];
 
-    function showLoading(){
-      dataTableEl.innerHTML = "<tr><td>Loading...</td></tr>";
-      finalTableEl.innerHTML = "<tr><td>Loading...</td></tr>";
+    function showLoadingTables() {
+      dataTableEl.innerHTML = "<tr><td class='skeleton'>Loading...</td></tr>";
+      finalTableEl.innerHTML = "<tr><td class='skeleton'>Loading...</td></tr>";
       errorArea.innerHTML = "";
     }
 
-    async function loadMonth(key){
-      const m = tables[key];
-      const url = buildCsvUrl(m.gid);
-      pageTitle.textContent = "🏆 CWL | Leaderboard - " + key;
-      subtitle.textContent = m.label;
-      showLoading();
-
-      try{
-        const res = await fetch(url);
-        if(!res.ok) throw new Error("Fetch failed: " + res.status);
-        const text = await res.text();
-        const lines = text.split(/\r?\n/).filter(l=>l.trim()!=="");
-        const rows = lines.map(parseCsvLine);
-        const headers = rows[0];
-        const dataRows = rows.slice(1);
-
-        let html = "<tr>" + headers.map(h=>`<th>${h}</th>`).join("") + "</tr>";
-        dataRows.forEach(r=>{
-          html += "<tr>" + r.map(c=>`<td>${c}</td>`).join("") + "</tr>";
-        });
-        dataTableEl.innerHTML = html;
-
-        const rankIndex = headers.findIndex(h=>h.toLowerCase()==="rank");
-        const playerIndex = headers.findIndex(h=>h.toLowerCase().includes("player"));
-        const pointsIndex = headers.findIndex(h=>h.toLowerCase().includes("total"));
-        const destructionIndex = headers.findIndex(h=>h.toLowerCase().includes("destruction"));
-
-        let finalHtml = "<tr><th>Player</th><th>Total Points</th><th>Destruction</th><th>Rank</th></tr>";
-        dataRows.forEach(r=>{
-          finalHtml += `
-            <tr>
-              <td>${r[playerIndex]||""}</td>
-              <td>${r[pointsIndex]||""}</td>
-              <td>${r[destructionIndex]||""}</td>
-              <td>${r[rankIndex]||""}</td>
-            </tr>
-          `;
-        });
-        finalTableEl.innerHTML = finalHtml;
-
-      }catch(e){
-        errorArea.innerHTML = "<div class='error-box'>❌ Sheet load failed</div>";
-        dataTableEl.innerHTML = "<tr><td>Error</td></tr>";
-        finalTableEl.innerHTML = "<tr><td>Error</td></tr>";
+    async function fetchWithTimeout(resource, options = {}) {
+      const { timeout = 15000 } = options;
+      const controller = new AbortController();
+      const id = setTimeout(() => controller.abort(), timeout);
+      try {
+        const response = await fetch(resource, { signal: controller.signal, cache: "no-store" });
+        clearTimeout(id);
+        return response;
+      } catch (err) {
+        clearTimeout(id);
+        throw err;
       }
     }
 
-    document.getElementById("prevBtn").onclick = ()=> {
-      currentIndex = (currentIndex-1+monthKeys.length)%monthKeys.length;
+    async function loadMonth(monthKey) {
+      const entry = tables[monthKey];
+      const csvUrl = getCsvUrl(entry);
+      pageTitle.textContent = `🏆 CWL | Leaderboard - ${entry?.label || monthKey}`;
+      subtitle.textContent = entry?.label || monthKey;
+      showLoadingTables();
+
+      try {
+        const resp = await fetchWithTimeout(csvUrl);
+        if (!resp.ok) {
+          // If receives 4xx/5xx try helpful error message & small fallback attempts
+          const msg = `Sheet fetch failed: ${resp.status} ${resp.statusText}`;
+          throw new Error(msg);
+        }
+        const text = await resp.text();
+        const lines = text.split(/\r?\n/).filter(l => l.trim() !== "");
+        if (lines.length === 0) {
+          dataTableEl.innerHTML = "<tr><td>No data found</td></tr>";
+          finalTableEl.innerHTML = "<tr><td>No data found</td></tr>";
+          return;
+        }
+
+        const rows = lines.map(line => parseCsvLine(line));
+        const headers = rows[0];
+        const dataRows = rows.slice(1).filter(r => r.some(c => c.trim() !== ""));
+
+        // sort by Rank if present
+        const rankIndex = headers.findIndex(h => h && h.toLowerCase().trim() === "rank");
+        if (rankIndex >= 0) dataRows.sort((a,b) => (parseFloat(a[rankIndex])||0) - (parseFloat(b[rankIndex])||0));
+
+        // build main table
+        let html = "<tr>";
+        for (const h of headers) html += `<th>${h||""}</th>`;
+        html += "</tr>";
+        for (const row of dataRows) {
+          html += "<tr>" + row.map(c => `<td>${c||""}</td>`).join("") + "</tr>";
+        }
+        dataTableEl.innerHTML = html;
+
+        // build final points table (attempt)
+        const playerIndex = headers.findIndex(h => h && h.toLowerCase().includes("player"));
+        const pointsIndex = headers.findIndex(h => h && h.toLowerCase().includes("total points"));
+        const destructionIndex = headers.findIndex(h => h && h.toLowerCase().includes("destruction"));
+        let finalRows = dataRows;
+        if (rankIndex >= 0) finalRows.sort((a,b) => (parseFloat(a[rankIndex])||0) - (parseFloat(b[rankIndex])||0));
+
+        let finalHtml = "<tr><th>Player Name</th><th>Total Points</th><th>Destruction %</th><th>Rank</th></tr>";
+        for (const r of finalRows) {
+          finalHtml += `<tr>
+            <td>${(playerIndex>=0 ? r[playerIndex] : r[0])||""}</td>
+            <td>${(pointsIndex>=0 ? r[pointsIndex] : "")||""}</td>
+            <td>${(destructionIndex>=0 ? r[destructionIndex] : "")||""}</td>
+            <td>${(rankIndex>=0 ? r[rankIndex] : "")||""}</td>
+          </tr>`;
+        }
+        finalTableEl.innerHTML = finalHtml;
+
+      } catch (err) {
+        console.error(err);
+        // Friendly user message + troubleshooting hints
+        const msg = (err && err.message) ? err.message : String(err);
+        errorArea.innerHTML = `<div class="error-box">
+          <strong>Data load failed:</strong> ${msg}<br>
+          <small class="small-muted">Possible causes: sheet not shared as "Anyone with the link", wrong gid/csv, or Google blocking export. Verify the sheet's sharing settings and the gid value.</small>
+        </div>`;
+
+        dataTableEl.innerHTML = `<tr><td>Error loading sheet data<br><span class="small-muted">${msg}</span></td></tr>`;
+        finalTableEl.innerHTML = `<tr><td>Error loading sheet data<br><span class="small-muted">${msg}</span></td></tr>`;
+      }
+    }
+
+    function goToIndex(i) {
+      if (i < 0) i = 0;
+      if (i >= monthKeys.length) i = monthKeys.length - 1;
+      currentIndex = i;
       monthSelect.value = monthKeys[currentIndex];
       loadMonth(monthKeys[currentIndex]);
-    };
+    }
 
-    document.getElementById("nextBtn").onclick = ()=> {
-      currentIndex = (currentIndex+1)%monthKeys.length;
-      monthSelect.value = monthKeys[currentIndex];
+    prevBtn.addEventListener('click', () => goToIndex(currentIndex - 1));
+    nextBtn.addEventListener('click', () => goToIndex(currentIndex + 1));
+    monthSelect.addEventListener('change', (e) => {
+      currentIndex = monthKeys.indexOf(e.target.value);
       loadMonth(monthKeys[currentIndex]);
-    };
+    });
 
-    monthSelect.onchange = ()=>{
-      currentIndex = monthKeys.indexOf(monthSelect.value);
+    // initial load
+    goToIndex(currentIndex);
+
+    // auto refresh
+    setInterval(() => {
       loadMonth(monthKeys[currentIndex]);
-    };
+    }, REFRESH_INTERVAL);
 
-    loadMonth(monthKeys[currentIndex]);
-    setInterval(()=>loadMonth(monthKeys[currentIndex]),REFRESH_INTERVAL);
+    /**********************************************
+     *  Quick tips (සිංහලෙන්)                   *
+     *  - If "Data load failed" appears:         *
+     *    1) Open the Google Sheet → Share →      *
+     *       Change General access to "Anyone    *
+     *       with the link" (Viewer).            *
+     *    2) If November returns gid=0 and still *
+     *       fails, try duplicating that sheet   *
+     *       (Right-click tab → Duplicate) and   *
+     *       use the new tab's gid here.         *
+     *  - To add months: edit the `tables` obj   *
+     **********************************************/
   </script>
-
-  <!-- 🔥 Clash of Clans Footer -->
-  <footer class="coc-footer">
-    <div class="coc-bg"></div>
-
-    <div class="coc-footer-content">
-      <img 
-        src="coc-icon-45736.png"
-        class="coc-logo-left"
-      >
-
-      <!-- 🔁 Replace URL with your real transparent logo later -->
-      <img 
-        src="26545-removebg-preview.png"
-        class="clan-logo-center"
-      >
-
-      <div class="clan-name">CWL</div>
-    </div>
-
-    <div class="footer-text">
-      © 2025 CHECKMATES | Clash of Clans War Stats
-    </div>
-  </footer>
-<script>
-function sortTableByRank() {
-  const table = document.querySelector("#dataTable");
-  if (!table) return;
-
-  const tbody = table.querySelector("tbody");
-  const rows = Array.from(tbody.querySelectorAll("tr"));
-
-  rows.sort((a, b) => {
-    // 2nd column = index 1
-    const rankA = parseFloat(a.cells[1].innerText.trim()) || 0;
-    const rankB = parseFloat(b.cells[1].innerText.trim()) || 0;
-    return rankA - rankB;
-  });
-
-  rows.forEach(row => tbody.appendChild(row));
-}
-
-// Run when page loads
-document.addEventListener("DOMContentLoaded", () => {
-  sortTableByRank();
-});
-</script>
-
+      
 </body>
 </html>
